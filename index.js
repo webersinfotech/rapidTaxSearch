@@ -5,18 +5,18 @@ const fs = require('fs')
 const jsonl = require("jsonl")
 
 const schemas = [
-    {
-        table: 'companies',
-        columns: ['id', 'CIN', 'Name']
-    }, 
+    // {
+    //     table: 'companies',
+    //     columns: ['id', 'CIN', 'Name']
+    // }, 
     {
         table: 'currencyList',
         columns: ['id', 'Code', 'Currency']
     }, 
-    {
-        table: 'directors',
-        columns: ['id', 'DIN', 'director']
-    }, 
+    // {
+    //     table: 'directors',
+    //     columns: ['id', 'DIN', 'director']
+    // }, 
     {
         table: 'IFSC',
         columns: ['id', 'IFSC', 'Branch']
@@ -32,10 +32,10 @@ const schemas = [
         table: 'stockMarket',
         columns: ['id', 'code', 'company']
     }, 
-    {
-        table: 'trademarkData',
-        columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
-    },  
+    // {
+    //     table: 'trademarkData',
+    //     columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
+    // },  
     {
         table: 'banks',
         columns: ['id', 'name']
@@ -84,8 +84,6 @@ const schemas = [
 
     for (let schema of schemas) {
         try {
-            // const resp = await typesense.importFile(schema.table, `./jsonlSchemas/${schema.table}.jsonl`)
-            // console.log(resp)
             let rows = fs.readFileSync(`./schemas/${schema.table}.json`, 'utf-8')
             rows = JSON.parse(rows)
             for (let [index, row] of rows.entries()) {
