@@ -14,10 +14,10 @@ const schemas = [
     //     table: 'currencyList',
     //     columns: ['id', 'Code', 'Currency']
     // }, 
-    {
-        table: 'directors',
-        columns: ['id', 'DIN', 'director']
-    }, 
+    // {
+    //     table: 'directors',
+    //     columns: ['id', 'DIN', 'director']
+    // }, 
     // {
     //     table: 'IFSC',
     //     columns: ['id', 'IFSC', 'Branch']
@@ -34,10 +34,10 @@ const schemas = [
     //     table: 'stockMarket',
     //     columns: ['id', 'code', 'company']
     // }, 
-    {
-        table: 'trademarkData',
-        columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
-    },  
+    // {
+    //     table: 'trademarkData',
+    //     columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
+    // },  
     // {
     //     table: 'banks',
     //     columns: ['id', 'name']
