@@ -87,16 +87,22 @@ const schemas = [
 
     for (let schema of schemas) {
         try {
+            const rows = []
+
             const file = readline.createInterface({
                 input: fs.createReadStream(`./jsonlSchemas/${schema.table}.jsonl`),
                 output: process.stdout,
                 terminal: false
             });
 
-            file.on('line', async (line) => {
-                const resp = await typesense.createDoc(schema.table, JSON.parse(line))
-                console.log(resp)
-            });
+            file.on('line', async (line) => rows.push(JSON.parse(line)));
+            
+            file.on('close', async () => {
+                for (let row of rows) {
+                    const resp = await typesense.createDoc(schema.table, JSON.parse(row))
+                    console.log(resp)
+                }
+            })
         } catch (err) {
             console.log(err)
         }
