@@ -95,12 +95,15 @@ const schemas = [
                 terminal: false
             });
 
-            file.on('line', async (line) => rows.push(JSON.parse(line)));
+            file.on('line', async (line) => {
+                console.log(line)
+                rows.push(JSON.parse(line))
+            });
             
             file.on('close', async () => {
                 for (let [index, row] of rows.entries()) {
                     const resp = await typesense.createDoc(schema.table, JSON.parse(row))
-                    console.log(`${schema.table} ::: ${index}`, resp)
+                    console.log(`${schema.table} ::: ${index} ::: `, resp)
                 }
             })
         } catch (err) {
