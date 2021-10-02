@@ -3,6 +3,7 @@ const typesense = require('./typesense');
 const database = require('./databse')
 const fs = require('fs')
 const jsonl = require("jsonl")
+const readline = require('readline')
 
 const schemas = [
     {
@@ -86,16 +87,20 @@ const schemas = [
 
     for (let schema of schemas) {
         try {
-            let rows = fs.readFileSync(`./schemas/${schema.table}.json`, 'utf-8')
-            rows = JSON.parse(rows)
-            for (let [index, row] of rows.entries()) {
-                const resp = await typesense.createDoc(schema.table, row)
-                console.log(`resp: ${index} ::: `, resp)
-            }
+            const file = readline.createInterface({
+                input: fs.createReadStream(`./jsonlSchemas/${schema.table}.jsonl`),
+                output: process.stdout,
+                terminal: false
+            });
+
+            file.on('line', async (line) => {
+                const resp = await typesense.createDoc(schema.table, JSON.parse(line))
+                console.log(resp)
+            });
         } catch (err) {
-            console.error(err)
+            console.log(err)
         }
     }
 
-    process.exit()
+    // process.exit()
 })()
