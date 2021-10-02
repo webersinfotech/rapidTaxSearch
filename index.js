@@ -5,18 +5,18 @@ const fs = require('fs')
 const jsonl = require("jsonl")
 
 const schemas = [
-    // {
-    //     table: 'companies',
-    //     columns: ['id', 'CIN', 'Name']
-    // }, 
     {
-        table: 'currencyList',
-        columns: ['id', 'Code', 'Currency']
+        table: 'companies',
+        columns: ['id', 'CIN', 'Name']
     }, 
     // {
-    //     table: 'directors',
-    //     columns: ['id', 'DIN', 'director']
+    //     table: 'currencyList',
+    //     columns: ['id', 'Code', 'Currency']
     // }, 
+    {
+        table: 'directors',
+        columns: ['id', 'DIN', 'director']
+    }, 
     // {
     //     table: 'IFSC',
     //     columns: ['id', 'IFSC', 'Branch']
@@ -25,26 +25,26 @@ const schemas = [
     //     table: 'importExport',
     //     columns: ['id', 'HSN', 'Description']
     // }, 
-    {
-        table: 'pincode',
-        columns: ['id', 'pincode', 'circleName', 'regionName', 'divisionName', 'officeName', 'district', 'stateName']
-    }, 
-    {
-        table: 'stockMarket',
-        columns: ['id', 'code', 'company']
-    }, 
     // {
-    //     table: 'trademarkData',
-    //     columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
-    // },  
+    //     table: 'pincode',
+    //     columns: ['id', 'pincode', 'circleName', 'regionName', 'divisionName', 'officeName', 'district', 'stateName']
+    // }, 
+    // {
+    //     table: 'stockMarket',
+    //     columns: ['id', 'code', 'company']
+    // }, 
     {
-        table: 'banks',
-        columns: ['id', 'name']
-    }, 
-    {
-        table: 'mutualFund',
-        columns: ['id', 'Name', 'FundHouse']
-    }
+        table: 'trademarkData',
+        columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
+    },  
+    // {
+    //     table: 'banks',
+    //     columns: ['id', 'name']
+    // }, 
+    // {
+    //     table: 'mutualFund',
+    //     columns: ['id', 'Name', 'FundHouse']
+    // }
 ];
 
 (async () => {
