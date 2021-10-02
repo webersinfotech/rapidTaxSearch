@@ -46,41 +46,41 @@ const schemas = [
 ];
 
 (async () => {
-    for (let schema of schemas) {
-        const rows = await database.getRows({
-            where: {},
-            columns: schema.columns,
-            table: schema.table
-        })
-        for (let [index, row] of rows.entries()) {
-            for (let key of Object.keys(row)) {
-                rows[index][key] = rows[index][key] ? `${rows[index][key]}` : ''
-            }
-        }
-        fs.writeFileSync(`./schemas/${schema.table}.json`, JSON.stringify(rows), 'UTF-8')
-        console.log(`File is written ./schemas/${schema.table}.json`)
-    }
+    // for (let schema of schemas) {
+    //     const rows = await database.getRows({
+    //         where: {},
+    //         columns: schema.columns,
+    //         table: schema.table
+    //     })
+    //     for (let [index, row] of rows.entries()) {
+    //         for (let key of Object.keys(row)) {
+    //             rows[index][key] = rows[index][key] ? `${rows[index][key]}` : ''
+    //         }
+    //     }
+    //     fs.writeFileSync(`./schemas/${schema.table}.json`, JSON.stringify(rows), 'UTF-8')
+    //     console.log(`File is written ./schemas/${schema.table}.json`)
+    // }
 
-    for (let schema of schemas) {
-        fs.createReadStream(`schemas/${schema.table}.json`)
-        .pipe(jsonl())
-        .pipe(fs.createWriteStream(`jsonlSchemas/${schema.table}.jsonl`))
-    }
+    // for (let schema of schemas) {
+    //     fs.createReadStream(`schemas/${schema.table}.json`)
+    //     .pipe(jsonl())
+    //     .pipe(fs.createWriteStream(`jsonlSchemas/${schema.table}.jsonl`))
+    // }
 
-    for (let schema of schemas) {
-        const resp = await typesense.dropCollection(schema.table)
-        console.log(resp)
-    }
+    // for (let schema of schemas) {
+    //     const resp = await typesense.dropCollection(schema.table)
+    //     console.log(resp)
+    // }
 
-    for (let schema of schemas) {
-        try {
-            const structure = schemaStructure[schema.table]()
-            const resp = await typesense.createCollection(structure)
-            console.log(resp)
-        } catch (err) {
-            console.error(err)
-        }
-    }
+    // for (let schema of schemas) {
+    //     try {
+    //         const structure = schemaStructure[schema.table]()
+    //         const resp = await typesense.createCollection(structure)
+    //         console.log(resp)
+    //     } catch (err) {
+    //         console.error(err)
+    //     }
+    // }
 
     for (let schema of schemas) {
         try {
