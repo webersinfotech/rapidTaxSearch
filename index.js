@@ -17,18 +17,19 @@ const schemas = [
     //     table: 'directors',
     //     columns: ['id', 'DIN', 'director']
     // }, 
-    {
-        table: 'IFSC',
-        columns: ['id', 'IFSC', 'Branch']
-    }, 
-    {
-        table: 'importExport',
-        columns: ['id', 'HSN', 'Description']
-    }, 
+    // {
+    //     table: 'IFSC',
+    //     columns: ['id', 'IFSC', 'Branch']
+    // }, 
+    // {
+    //     table: 'importExport',
+    //     columns: ['id', 'HSN', 'Description']
+    // }, 
     {
         table: 'pincode',
         columns: ['id', 'pincode', 'circleName', 'regionName', 'divisionName', 'officeName', 'district', 'stateName']
-    }, {
+    }, 
+    {
         table: 'stockMarket',
         columns: ['id', 'code', 'company']
     }, 
@@ -39,7 +40,8 @@ const schemas = [
     {
         table: 'banks',
         columns: ['id', 'name']
-    }, {
+    }, 
+    {
         table: 'mutualFund',
         columns: ['id', 'Name', 'FundHouse']
     }
