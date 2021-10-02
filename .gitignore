@@ -1,0 +1,7 @@
+rapidtax
+node_modules
+package-lock.json
+rapidtax.zip
+jsonlSchemas/*
+schemas/*
+RapidTax.pem
