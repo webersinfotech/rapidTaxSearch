@@ -98,9 +98,9 @@ const schemas = [
             file.on('line', async (line) => rows.push(JSON.parse(line)));
             
             file.on('close', async () => {
-                for (let row of rows) {
+                for (let [index, row] of rows.entries()) {
                     const resp = await typesense.createDoc(schema.table, JSON.parse(row))
-                    console.log(resp)
+                    console.log(`${schema.table} ::: ${index}`, resp)
                 }
             })
         } catch (err) {
