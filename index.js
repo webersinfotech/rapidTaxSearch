@@ -103,6 +103,7 @@ const schemas = [
                             console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, err)
                         }
                     }
+                    fs.unlinkSync(`./splittedDir/${schema.table}/${file}`)
                 }
             } else {
                 let rows = fs.readdirSync(`./schemas/${schema.table}.json`)
@@ -120,26 +121,6 @@ const schemas = [
             console.log(err)
         }
     }
-
-    // const rows = []
-
-    // const file = readline.createInterface({
-    //     input: fs.createReadStream(`./jsonlSchemas/${schema.table}.jsonl`),
-    //     output: process.stdout,
-    //     terminal: false
-    // });
-
-    // file.on('line', async (line) => {
-    //     console.log(line)
-    //     rows.push(JSON.parse(line))
-    // });
-    
-    // file.on('close', async () => {
-    //     for (let [index, row] of rows.entries()) {
-    //         const resp = await typesense.createDoc(schema.table, JSON.parse(row))
-    //         console.log(`${schema.table} ::: ${index} ::: `, resp)
-    //     }
-    // })
 
     // for (let schema of schemas) {
     //     if (!fs.existsSync(`./splittedDir/${schema.table}`)) fs.mkdirSync(`./splittedDir/${schema.table}`)
