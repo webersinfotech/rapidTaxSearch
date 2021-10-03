@@ -8,16 +8,18 @@ const readline = require('readline')
 const schemas = [
     {
         table: 'companies',
-        columns: ['id', 'CIN', 'Name']
+        columns: ['id', 'CIN', 'Name'],
+        splitted: true
     }, 
     // {
     //     table: 'currencyList',
     //     columns: ['id', 'Code', 'Currency']
     // }, 
-    // {
-    //     table: 'directors',
-    //     columns: ['id', 'DIN', 'director']
-    // }, 
+    {
+        table: 'directors',
+        columns: ['id', 'DIN', 'director'],
+        splitted: true
+    }, 
     // {
     //     table: 'IFSC',
     //     columns: ['id', 'IFSC', 'Branch']
@@ -34,10 +36,11 @@ const schemas = [
     //     table: 'stockMarket',
     //     columns: ['id', 'code', 'company']
     // }, 
-    // {
-    //     table: 'trademarkData',
-    //     columns: ['id', 'ApplicantId', 'Name', 'ApplicantName']
-    // },  
+    {
+        table: 'trademarkData',
+        columns: ['id', 'ApplicantId', 'Name', 'ApplicantName'],
+        splitted: true
+    },  
     // {
     //     table: 'banks',
     //     columns: ['id', 'name']
@@ -87,29 +90,71 @@ const schemas = [
 
     for (let schema of schemas) {
         try {
-            const rows = []
-
-            const file = readline.createInterface({
-                input: fs.createReadStream(`./jsonlSchemas/${schema.table}.jsonl`),
-                output: process.stdout,
-                terminal: false
-            });
-
-            file.on('line', async (line) => {
-                console.log(line)
-                rows.push(JSON.parse(line))
-            });
-            
-            file.on('close', async () => {
-                for (let [index, row] of rows.entries()) {
-                    const resp = await typesense.createDoc(schema.table, JSON.parse(row))
-                    console.log(`${schema.table} ::: ${index} ::: `, resp)
+            if (schema.splitted) {
+                const files = fs.readdirSync(`./splittedDir/${schema.table}`)
+                for (let file of files) {
+                    let rows = fs.readFileSync(`./splittedDir/${schema.table}/${file}`, 'utf-8')
+                    rows = JSON.parse(rows)
+                    for (let [index, row] of rows.entries()) {
+                        try {
+                            const resp = await typesense.createDoc(schema.table, JSON.parse(row))
+                            console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, resp)
+                        } catch (err) {
+                            console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, err)
+                        }
+                    }
                 }
-            })
+            } else {
+                let rows = fs.readdirSync(`./schemas/${schema.table}.json`)
+                rows = JSON.parse(rows)
+                for (let [index, row] of rows.entries()) {
+                    try {
+                        const resp = await typesense.createDoc(schema.table, JSON.parse(row))
+                        console.log(`${schema.table} ::: ${index} ::: `, resp)
+                    } catch (err) {
+                        console.log(`${schema.table} ::: ${index} ::: `, err)
+                    }
+                }
+            }
         } catch (err) {
             console.log(err)
         }
     }
+
+    // const rows = []
+
+    // const file = readline.createInterface({
+    //     input: fs.createReadStream(`./jsonlSchemas/${schema.table}.jsonl`),
+    //     output: process.stdout,
+    //     terminal: false
+    // });
+
+    // file.on('line', async (line) => {
+    //     console.log(line)
+    //     rows.push(JSON.parse(line))
+    // });
+    
+    // file.on('close', async () => {
+    //     for (let [index, row] of rows.entries()) {
+    //         const resp = await typesense.createDoc(schema.table, JSON.parse(row))
+    //         console.log(`${schema.table} ::: ${index} ::: `, resp)
+    //     }
+    // })
+
+    // for (let schema of schemas) {
+    //     if (!fs.existsSync(`./splittedDir/${schema.table}`)) fs.mkdirSync(`./splittedDir/${schema.table}`)
+
+    //     const data = require(`./schemas/${schema.table}.json`)
+
+    //     const makeChunk = (a,n)=>[...Array(Math.ceil(a.length/n))].map((_,i)=>a.slice(n*i,n+n*i));
+
+    //     const chunks = makeChunk(data, 100000)
+
+    //     for (let [index, chunk] of chunks.entries()) {
+    //         console.log(`${schema.table} ::: ${index}`)
+    //         fs.writeFileSync(`./splittedDir/${schema.table}/${index}.json`, JSON.stringify(chunk), 'utf-8')
+    //     }
+    // }
 
     // process.exit()
 })()
