@@ -97,8 +97,9 @@ const schemas = [
                     rows = JSON.parse(rows)
                     for (let [index, row] of rows.entries()) {
                         try {
-                            const resp = await typesense.createDoc(schema.table, row)
-                            console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, resp)
+                            console.log(row)
+                            // const resp = await typesense.createDoc(schema.table, row)
+                            // console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, resp)
                         } catch (err) {
                             console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, err)
                         }
@@ -109,8 +110,9 @@ const schemas = [
                 rows = JSON.parse(rows)
                 for (let [index, row] of rows.entries()) {
                     try {
-                        const resp = await typesense.createDoc(schema.table, row)
-                        console.log(`${schema.table} ::: ${index} ::: `, resp)
+                        console.log(row)
+                        // const resp = await typesense.createDoc(schema.table, row)
+                        // console.log(`${schema.table} ::: ${index} ::: `, resp)
                     } catch (err) {
                         console.log(`${schema.table} ::: ${index} ::: `, err)
                     }
