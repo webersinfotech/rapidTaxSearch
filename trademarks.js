@@ -4,6 +4,7 @@ const database = require('./databse')
 const fs = require('fs')
 const jsonl = require("jsonl")
 const readline = require('readline')
+const axios = require('axios');
 
 const schemas = [
     // {
@@ -68,9 +69,15 @@ const schemas = [
     // }
 
     // for (let schema of schemas) {
-    //     fs.createReadStream(`schemas/${schema.table}.json`)
-    //     .pipe(jsonl())
-    //     .pipe(fs.createWriteStream(`jsonlSchemas/${schema.table}.jsonl`))
+    //     if (!fs.existsSync(`./splittedDir/jsonl/${schema.table}`)) fs.mkdirSync(`./splittedDir/jsonl/${schema.table}`)
+
+    //     const files = fs.readdirSync(`./splittedDir/${schema.table}`)
+
+    //     for (let file of files) {
+    //         fs.createReadStream(`./splittedDir/${schema.table}/${file}`)
+    //         .pipe(jsonl())
+    //         .pipe(fs.createWriteStream(`./splittedDir/jsonl/${schema.table}/${file}`))
+    //     }
     // }
 
     // for (let schema of schemas) {
@@ -88,39 +95,39 @@ const schemas = [
     //     }
     // }
 
-    for (let schema of schemas) {
-        try {
-            if (schema.splitted) {
-                const files = fs.readdirSync(`./splittedDir/${schema.table}`)
-                for (let file of files) {
-                    let rows = fs.readFileSync(`./splittedDir/${schema.table}/${file}`, 'utf-8')
-                    rows = JSON.parse(rows)
-                    for (let [index, row] of rows.entries()) {
-                        try {
-                            const resp = await typesense.createDoc(schema.table, row)
-                            console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, resp)
-                        } catch (err) {
-                            console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, err)
-                        }
-                    }
-                    fs.unlinkSync(`./splittedDir/${schema.table}/${file}`)
-                }
-            } else {
-                let rows = fs.readdirSync(`./schemas/${schema.table}.json`)
-                rows = JSON.parse(rows)
-                for (let [index, row] of rows.entries()) {
-                    try {
-                        const resp = await typesense.createDoc(schema.table, row)
-                        console.log(`${schema.table} ::: ${index} ::: `, resp)
-                    } catch (err) {
-                        console.log(`${schema.table} ::: ${index} ::: `, err)
-                    }
-                }
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    // for (let schema of schemas) {
+    //     try {
+    //         if (schema.splitted) {
+    //             const files = fs.readdirSync(`./splittedDir/${schema.table}`)
+    //             for (let file of files) {
+    //                 let rows = fs.readFileSync(`./splittedDir/${schema.table}/${file}`, 'utf-8')
+    //                 rows = JSON.parse(rows)
+    //                 for (let [index, row] of rows.entries()) {
+    //                     try {
+    //                         const resp = await typesense.createDoc(schema.table, row)
+    //                         console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, resp)
+    //                     } catch (err) {
+    //                         console.log(`${schema.table} ::: ${file} ::: ${index} ::: `, err)
+    //                     }
+    //                 }
+    //                 fs.unlinkSync(`./splittedDir/${schema.table}/${file}`)
+    //             }
+    //         } else {
+    //             let rows = fs.readdirSync(`./schemas/${schema.table}.json`)
+    //             rows = JSON.parse(rows)
+    //             for (let [index, row] of rows.entries()) {
+    //                 try {
+    //                     const resp = await typesense.createDoc(schema.table, row)
+    //                     console.log(`${schema.table} ::: ${index} ::: `, resp)
+    //                 } catch (err) {
+    //                     console.log(`${schema.table} ::: ${index} ::: `, err)
+    //                 }
+    //             }
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     // for (let schema of schemas) {
     //     if (!fs.existsSync(`./splittedDir/${schema.table}`)) fs.mkdirSync(`./splittedDir/${schema.table}`)
@@ -129,13 +136,35 @@ const schemas = [
 
     //     const makeChunk = (a,n)=>[...Array(Math.ceil(a.length/n))].map((_,i)=>a.slice(n*i,n+n*i));
 
-    //     const chunks = makeChunk(data, 100000)
+    //     const chunks = makeChunk(data, 1000)
 
     //     for (let [index, chunk] of chunks.entries()) {
     //         console.log(`${schema.table} ::: ${index}`)
     //         fs.writeFileSync(`./splittedDir/${schema.table}/${index}.json`, JSON.stringify(chunk), 'utf-8')
     //     }
     // }
+
+    for (let schema of schemas) {
+        try {
+            if (schema.splitted) {
+                const files = fs.readdirSync(`./splittedDir/${schema.table}`)
+                for (let file of files) {
+                    try {
+                        console.log(`Reading ::: ${file}`)
+                        const rows = fs.readFileSync(`./splittedDir/${schema.table}/${file}`, 'utf-8')
+                        const resp = await typesense.importDocs(schema.table, JSON.parse(rows))
+                        fs.unlinkSync(`./splittedDir/${schema.table}/${file}`)
+                        console.log(resp)
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     // process.exit()
 })()

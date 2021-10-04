@@ -27,20 +27,8 @@ class TypesenseClass {
         return this.client.collections(schema).delete()
     }
 
-    async importFile(schema, path) {
-        // const file = readline.createInterface({
-        //     input: fs.createReadStream(path),
-        //     output: process.stdout,
-        //     terminal: false
-        // });
-
-        // file.on('line', async (line) => {
-        //     const resp = await this.createDoc(schema, JSON.parse(line))
-        //     console.log(JSON.parse(resp));
-        // });
-
-        const documentsInJsonl = await fs.readFileSync(path, 'utf-8');
-        return this.client.collections(schema).documents().import(documentsInJsonl, {action: 'upsert'})
+    async importDocs(schema, docs) {
+        return this.client.collections(schema).documents().import(docs, {action: 'upsert'})
     }
 }
 
